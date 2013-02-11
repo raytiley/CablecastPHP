@@ -12,6 +12,12 @@ class Show
         $this->lengthInSeconds = $lengthInSeconds;
     }
 
+    private $showID;
+    public function getShowID()
+    {
+        return $this->showID;
+    }
+
     private $title;
     public function getTitle()
     {
