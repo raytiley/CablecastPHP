@@ -12,28 +12,28 @@ class Show
         $this->lengthInSeconds = $lengthInSeconds;
     }
 
-  private $title;
-  public function getTitle()
-  {
-    return $this->title;
-  }
+    private $title;
+    public function getTitle()
+    {
+        return $this->title;
+    }
 
-  private $cgTitle;
-  public function getCGTitle()
-  {
-    return $this->cgTitle;
-  }
+    private $cgTitle;
+    public function getCGTitle()
+    {
+        return $this->cgTitle;
+    }
 
-  private $lengthInSeconds;
-  public function getLengthInSeconds()
-  {
-    return $this->lengthInSeconds;
-  }
+    private $lengthInSeconds;
+    public function getLengthInSeconds()
+    {
+        return $this->lengthInSeconds;
+    }
 
-  private $comments;
-  public function getComments()
-  {
-    return $this->comments;
-  }
+    private $comments;
+    public function getComments()
+    {
+        return $this->comments;
+    }
 }
-
+?>
