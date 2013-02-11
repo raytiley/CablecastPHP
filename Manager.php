@@ -1,5 +1,13 @@
 <?php
-namespace CablecastPHP
+namespace CablecastPHP;
+
+use CablecastPHP\Show;
+use CablecastPHP\ScheduleItem;
+use CablecastPHP\Location;
+use CablecastPHP\Channel;
+
+use SoapClient;
+use DateTime;
 
 class Manager
 {
@@ -37,7 +45,7 @@ class Manager
 		$this->cachedChannels = array();
 
 		foreach ($result->GetChannelsResult->Channel as $channel) {
-			$this->cachedChannels[] = new CablecastChannel($channel->ChannelID, $channel->Name, $channel->PrimaryLocationID);
+			$this->cachedChannels[] = new Channel($channel->ChannelID, $channel->Name, $channel->PrimaryLocationID);
 		}
 
 		return $this->cachedChannels;
@@ -52,7 +60,7 @@ class Manager
 		$locations = array();
 
 		foreach($result as $location) {
-			$locations[] = new CablecastLocation($location->LocationID, $location->Name);
+			$locations[] = new Location($location->LocationID, $location->Name);
 		}
 
 		return $locations;
@@ -70,11 +78,11 @@ class Manager
 	    //Get Data from WebService
 		$result = $this->soapClient->GetCGExemptScheduleInformation($params);
 
-	    //Create CablecastScheduleItems if results are returned.
+	    //Create ScheduleItems if results are returned.
 		$schedule = array();
 		if($result->GetCGExemptScheduleInformationResult->ScheduleInfo) {
 			foreach ($result->GetCGExemptScheduleInformationResult->ScheduleInfo as $run) {
-				$schedule[] = new CablecastScheduleItem($run->ScheduleID,
+				$schedule[] = new ScheduleItem($run->ScheduleID,
 					$run->ShowID,
 					$run->ShowTitle,
 					new DateTime($run->StartTime),
@@ -87,8 +95,13 @@ class Manager
 		return $schedule;
 	}
 
-	public function getModifiedShows($locationID, $searchDate)
+	public function getModifiedShows($locationID, $searchDate = null)
 	{
+		if($searchDate == null)
+		{
+			$searchDate = new DateTime();
+			$searchDate->modify('-3 day');
+		}
 		$params = array(
 			"LocationID" => $locationID, 
 			"SearchDate" => $searchDate->format('Y-m-d\T00:00:00'), 
@@ -99,7 +112,7 @@ class Manager
 
 		$shows = array();
 		foreach ($result->LastModifiedSearchResult->ShowInfo as $show) {
-			$shows[] = new CablecastShow(
+			$shows[] = new Show(
 				$show->ShowID,
 				$show->InternalTitle,
 				$show->Title,
